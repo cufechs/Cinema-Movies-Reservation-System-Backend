@@ -4,48 +4,46 @@ namespace App\Http\Traits;
 
 trait GeneralTrait
 {
-    
     public function getCurrentLang()
     {
         return app()->getLocale();
     }
 
-    public function returnError($msg="Error",$errNum="00")
+    public function returnError($errNum, $code, $msg)
     {
         return response()->json([
             'status' => false,
             'errNum' => $errNum,
             'msg' => $msg
-        ]);
+        ], $code);
     }
 
-
-    public function returnSuccessMessage($msg = "", $errNum = "S000")
+    public function returnSuccessMessage($msg = "", $code = 200, $errNum = "S000")
     {
-        return [
+        return response()->json([
             'status' => true,
             'errNum' => $errNum,
             'msg' => $msg
-        ];
+        ], $code);
     }
 
-    public function returnData($key, $value, $msg = "")
+    public function returnData($key, $value, $code = 200, $msg = "")
     {
         return response()->json([
             'status' => true,
             'errNum' => "S000",
             'msg' => $msg,
             $key => $value
-        ]);
+        ], $code);
     }
 
 
     //////////////////
-     public function returnValidationError($validator,$code = "E001")
-     {
-         return $this->returnError($msg=$validator->errors()->first(),$errNum=$code);
-         //return $this->returnError($validator->errors()->first());
-     }
+    public function returnValidationError($code = "E001", $validator)
+    {
+        // dd($validator);
+        return $this->returnError($code, 400, $validator->errors()->first());
+    }
 
 
      public function returnCodeAccordingToInput($validator)
@@ -71,6 +69,10 @@ trait GeneralTrait
             return 'E005';
         else if ($input == "price")
             return 'E006';
+        else if ($input == "user not found")
+            return 'E007';
+        else if ($input == "incorrect email or password")
+            return 'E008';
         else
             return "";
     }
