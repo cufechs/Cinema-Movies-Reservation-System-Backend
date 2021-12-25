@@ -37,9 +37,16 @@ Route::options('/login', function () {
     ]);
 });
 
-//////////////////////User/////////////////////////
+////////////////////// User /////////////////////////
 Route::get('/users/{user}', 'UserController@index');
 Route::post('/users/create', 'UserController@create'); //create
 
-////////////////////Customer/////////////////////////
+//////////////////// Customer /////////////////////////
 Route::get('/customers/{customer}', 'CustomerController@index'); //index
+
+//////////////////// Moive /////////////////////////
+Route::get('/movies/all', 'MovieController@index'); //index
+Route::post('/movie/create', 'MovieController@create'); //create
+Route::get('/movie/show/{movie}', 'MovieController@show'); //show
+Route::post('/movie/update/{movie}', 'MovieController@update'); //update
+Route::delete('/movie/delete/{movie}', 'MovieController@destroy'); //delete

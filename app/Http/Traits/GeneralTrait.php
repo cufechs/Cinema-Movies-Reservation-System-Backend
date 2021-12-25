@@ -73,6 +73,8 @@ trait GeneralTrait
             return 'E007';
         else if ($input == "incorrect email or password")
             return 'E008';
+        else if ($input == "movie not found")
+            return 'E009';
         else
             return "";
     }
