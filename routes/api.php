@@ -53,3 +53,10 @@ Route::post('/movie/create', 'MovieController@create'); //create
 Route::get('/movie/show/{movie}', 'MovieController@show'); //show
 Route::put('/movie/update/{movie}', 'MovieController@update'); //update
 Route::delete('/movie/delete/{movie}', 'MovieController@destroy'); //delete
+
+////////////////////// Movie Reservation /////////////////////////
+Route::get('/moviereservations/{moviereservation}', 'MovieReservationController@show');
+Route::get('/moviereservations', 'MovieReservationController@index');
+Route::post('/moviereservations/create', 'MovieReservationController@create'); //create
+Route::put('/moviereservations/{moviereservation}', 'MovieReservationController@update'); //update
+Route::delete('/moviereservations/{moviereservation}', 'MovieReservationController@destroy'); //delete

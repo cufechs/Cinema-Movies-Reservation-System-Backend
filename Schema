@@ -20,16 +20,12 @@ Tables:
 		3- poster_image
 		4- description
 		
-	4- ScreeningRoom:
-		1- id (PK)
-		2- capacity //4 or 6 columns, 5 rows are constant
-		
 	5- MovieReservation:
 		1- id (PK)
 		2- date
 		3- start_time
 		4- end_time
-		5- screening_room_id (FK)
+		5- capacity
 		6- movie_id (FK)
 		7- vacant_reserved_seats //json array
 		8- price
