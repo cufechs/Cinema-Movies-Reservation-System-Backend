@@ -1,8 +1,7 @@
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzOTk2MDg4NywiZXhwIjoxNjM5OTY0NDg3LCJuYmYiOjE2Mzk5NjA4ODcsImp0aSI6InZEcjNCVVFiMG54eWE4a1EiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.cdRy6TO_1RrI0wj3dzlYqzIOkNUn2KghNCyZ-XCeKsA
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTY0MDExNDYwNCwiZXhwIjoxNjQwMTE4MjA0LCJuYmYiOjE2NDAxMTQ2MDQsImp0aSI6InY4WHVxQkVMdXA2Vms2cVoiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.mQwj05ab2Je76EJfq6tbqOlAfO7ysmFM4DYiFHsEn48
 
 GET http://127.0.0.1:8000/api/users/1 HTTP/1.1
 content-type: application/json
-Authorization: Bearer {{ token }}
 
 ###
 
@@ -14,6 +13,12 @@ content-type: application/json
   "email": "mallory52@example.net",
   "password": "secret"
 }
+
+###
+
+# logout
+POST http://127.0.0.1:8000/api/logout HTTP/1.1
+content-type: application/json
 
 ###
 

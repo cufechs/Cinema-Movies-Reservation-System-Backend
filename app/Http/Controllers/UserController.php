@@ -28,12 +28,7 @@ class UserController extends Controller
     public function index($user)
     {
         $userFound = User::find($user);
-        try {
-            $this->authorize('viewAny', $userFound);
-        } catch (\Exception $e)
-        {
-            return $e;
-        }
+        //$this->authorize('viewAny', $userFound);
 
         if(!$userFound)
             return $this->returnError(404, $this->getErrorCode('user not found'), 'user is not found');

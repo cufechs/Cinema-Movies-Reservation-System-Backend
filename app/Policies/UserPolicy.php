@@ -54,15 +54,14 @@ class UserPolicy
 
     public function viewAny(User $user, User $model)
     {
-        return true;
-        //return ($user->role === 'admin') || ($user->id === $model->id);
+        return ($user->role === 'admin') || ($user->id === $model->id);
     }
 
     /**
      * Determine whether the user can view himself.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Plan  $plan
+     * @param  \App\Models\User  $searchedUser
      * @return mixed
      */
     public function view(User $user, User $searchedUser)
