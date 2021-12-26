@@ -91,7 +91,7 @@ class MovieReservationController extends Controller
         if(!$movieReservationFound)
             return $this->returnError(404, $this->getErrorCode('moviereservation not found'), 'moviereservation is not found');
 
-        return $this->returnData('moviereservation', $userFound, 200, 'moviereservation found!');
+        return $this->returnData('moviereservation', $movieReservationFound, 200, 'moviereservation found!');
     }
 
     /**
