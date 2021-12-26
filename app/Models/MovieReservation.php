@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MovieReservation extends Model
 {
-    protected $table = 'movies';
+    protected $table = 'moviereservations';
 
     /**
      * The attributes that are mass assignable.

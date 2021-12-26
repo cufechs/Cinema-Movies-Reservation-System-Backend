@@ -38,10 +38,10 @@ Route::options('/login', function () {
 });
 
 ////////////////////// User /////////////////////////
-Route::get('/users/{user}', 'UserController@show');
-Route::get('/users', 'UserController@index');
-Route::post('/users/create', 'UserController@create'); //create
+Route::get('/users', 'UserController@index'); //index
+Route::get('/users/{user}', 'UserController@show'); //show
 Route::put('/users/{user}', 'UserController@update'); //update
+Route::post('/users/create', 'UserController@create'); //create
 Route::delete('/users/{user}', 'UserController@destroy'); //delete
 
 //////////////////// Customer /////////////////////////
@@ -55,8 +55,8 @@ Route::put('/movie/update/{movie}', 'MovieController@update'); //update
 Route::delete('/movie/delete/{movie}', 'MovieController@destroy'); //delete
 
 ////////////////////// Movie Reservation /////////////////////////
-Route::get('/moviereservations/{moviereservation}', 'MovieReservationController@show');
-Route::get('/moviereservations', 'MovieReservationController@index');
+Route::get('/moviereservations', 'MovieReservationController@index'); //index
 Route::post('/moviereservations/create', 'MovieReservationController@create'); //create
+Route::get('/moviereservations/{moviereservation}', 'MovieReservationController@show'); //show
 Route::put('/moviereservations/{moviereservation}', 'MovieReservationController@update'); //update
 Route::delete('/moviereservations/{moviereservation}', 'MovieReservationController@destroy'); //delete
