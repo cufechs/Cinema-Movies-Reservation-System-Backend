@@ -38,8 +38,11 @@ Route::options('/login', function () {
 });
 
 ////////////////////// User /////////////////////////
-Route::get('/users/{user}', 'UserController@index');
+Route::get('/users/{user}', 'UserController@show');
+Route::get('/users', 'UserController@index');
 Route::post('/users/create', 'UserController@create'); //create
+Route::put('/users/{user}', 'UserController@update'); //update
+Route::delete('/users/{user}', 'UserController@destroy'); //delete
 
 //////////////////// Customer /////////////////////////
 Route::get('/customers/{customer}', 'CustomerController@index'); //index
@@ -48,5 +51,5 @@ Route::get('/customers/{customer}', 'CustomerController@index'); //index
 Route::get('/movies/all', 'MovieController@index'); //index
 Route::post('/movie/create', 'MovieController@create'); //create
 Route::get('/movie/show/{movie}', 'MovieController@show'); //show
-Route::post('/movie/update/{movie}', 'MovieController@update'); //update
+Route::put('/movie/update/{movie}', 'MovieController@update'); //update
 Route::delete('/movie/delete/{movie}', 'MovieController@destroy'); //delete

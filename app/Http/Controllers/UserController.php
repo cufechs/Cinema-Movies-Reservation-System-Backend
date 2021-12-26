@@ -25,15 +25,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($user)
+    public function index()
     {
-        $userFound = User::find($user);
-        //$this->authorize('viewAny', $userFound);
+        $users = User::all();
+        #$this->authorize('view', $users);
 
-        if(!$userFound)
-            return $this->returnError(404, $this->getErrorCode('user not found'), 'user is not found');
-
-        return $this->returnData('user', $userFound, 200, 'user found!');
+        return $this->returnData('user', $users, 200, 'users returned!');
     }
 
     /**
@@ -43,7 +40,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $this->authorize('create',User::class);
+        #$this->authorize('create',User::class);
 
         $validator = Validator::make(request()->all(), [
             "first_name" => "required",
@@ -92,9 +89,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($user)
     {
-        //
+        $userFound = User::find($user);
+        #$this->authorize('viewAny', $userFound);
+
+        if(!$userFound)
+            return $this->returnError(404, $this->getErrorCode('user not found'), 'user is not found');
+
+        return $this->returnData('user', $userFound, 200, 'user found!');
     }
 
     /**
@@ -117,7 +120,27 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        #$this->authorize('create',User::class);
+
+        $user = User::find($id);
+        if ($user == null)
+            return $this->returnError($this->getErrorCode('user not found'), 404, 'User Not Found');
+
+        $validator = Validator::make(request()->all(), [
+            "username" => "unique:users,username,".$id,
+            "email" => "email|unique:users,email,".$id,
+            "role" => [Rule::in(['admin', 'customer','manager']),],
+            "mobile_number" => "digits_between:10,11"
+        ]);
+
+        if ($validator->fails()) {
+            $code = $this->returnCodeAccordingToInput($validator);
+            return $this->returnValidationError($code, $validator);
+        }
+
+        $user->update($request->all());
+
+        return $this->returnSuccessMessage('User Updated Successfully!');
     }
 
     /**
@@ -128,6 +151,15 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        #$this->authorize('delete', User::class);
+
+        $fetchedUser = User::find($id);
+
+        if ($fetchedUser == null)
+            return $this->returnError($this->getErrorCode('user not found'), 404, 'User Not Found');
+
+        $fetchedUser->delete();
+
+        return $this->returnSuccessMessage("User Deleted Successfully!");
     }
 }
