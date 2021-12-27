@@ -1,44 +1,57 @@
-//@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjMzMzM3NTgzLCJleHAiOjE2MzMzNDExODMsIm5iZiI6MTYzMzMzNzU4MywianRpIjoiNWg3eXIzekppQmFYYnp6MCIsInN1YiI6NCwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.UsYJA9bhNXw25gYXCUcgq7x6DAcr9_PEFIwbs_mHMo0
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTY0MDU0NjMxNywiZXhwIjoxNjQwNTQ5OTE3LCJuYmYiOjE2NDA1NDYzMTcsImp0aSI6ImJQVGhhNjV6bjJlcjRHaDYiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.xTT8zoI5an-EXrxwcBVw4MpAldUuJBG596QD1u7f-F8
 
+GET http://127.0.0.1:8000/api/moviereservations/30 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{ token }}
 
-# get all
+###
+
 GET http://127.0.0.1:8000/api/moviereservations HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{ token }}
+
+###
+
+# login
+POST http://127.0.0.1:8000/api/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "iharris@example.org",
+  "password": "secret"
+}
+
+###
+
+# logout
+POST http://127.0.0.1:8000/api/logout HTTP/1.1
 content-type: application/json
 
 ###
 
-# create
 POST http://127.0.0.1:8000/api/moviereservations/create HTTP/1.1
 content-type: application/json
 
 {
-    "date": "2021-12-26",
-    "start_time": "13:47:08",
-    "end_time": "13:45:21",
-    "vacant_reserved_seats": "create test",
-    "capacity": 99,
-    "price": 99,
-    "movie_id": 4
+  "date": "2020-12-13",
+  "start_time": "10:49:36",
+  "end_time": "09:07:58",
+  "vacant_reserved_seats": "Woow, Seats!",
+  "capacity": 2,
+  "price": 7,
+  "movie_id": 2
 }
 
 ###
 
-# update
-PUT http://127.0.0.1:8000/api/moviereservations/1 HTTP/1.1
+PUT http://127.0.0.1:8000/api/moviereservations/20 HTTP/1.1
 content-type: application/json
 
 {
-  "vacant_reserved_seats": "update test"
+  "first_name": "Osama"
 }
 
 ###
 
-# delete
-DELETE http://127.0.0.1:8000/api/moviereservations/2 HTTP/1.1
-content-type: application/json
-
-###
-
-# show
-GET http://127.0.0.1:8000/api/moviereservations/1 HTTP/1.1
+DELETE http://127.0.0.1:8000/api/moviereservations/21 HTTP/1.1
 content-type: application/json

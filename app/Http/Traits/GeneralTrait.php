@@ -75,6 +75,12 @@ trait GeneralTrait
             return 'E008';
         else if ($input == "movie not found")
             return 'E009';
+        else if ($input == "moviereservation not found")
+            return 'E010';
+        else if ($input == "overlap in time of reservation")
+            return 'E011';
+        else if ($input == "start time shouldn't be greater than end time")
+            return 'E012';
         else
             return "";
     }

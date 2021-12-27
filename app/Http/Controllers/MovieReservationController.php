@@ -46,12 +46,36 @@ class MovieReservationController extends Controller
             'movie_id' => "required"
         ]);
 
+        $newStartTime = strtotime(request('start_time'));
+        $newEndTime = strtotime(request('end_time'));
+
+        //start time can't be greater than end time :D
+        if($newStartTime >= $newEndTime)
+            return $this->returnError($this->getErrorCode("start time shouldn't be greater than end time"), 404, "start time shouldn't be greater than end time");
+
+        $sameDateReservations = MovieReservation::where('date', 'LIKE', request('date') . '%')->get();
+
+        for($i=0; $i<count($sameDateReservations); $i++)
+        {
+            $movResv = $sameDateReservations[$i];
+
+            $startTime = strtotime($movResv->start_time);
+            $endTime = strtotime($movResv->end_time);
+
+            if($newStartTime > $startTime && $newEndTime < $endTime ||
+            ($newStartTime > $startTime && $newStartTime < $endTime) || ($newEndTime > $startTime && $newEndTime < $endTime) ||
+            $newStartTime==$startTime || $newEndTime==$endTime||
+            $startTime > $newStartTime && $endTime < $newEndTime)
+            {
+                //overlap in time
+                return $this->returnError($this->getErrorCode('overlap in time of reservation'), 404, 'Overlap in time of reservation is not allowed!');
+            }
+        }
+
         if ($validator->fails()) {
             $code = $this->returnCodeAccordingToInput($validator);
             return $this->returnValidationError($code, $validator);
         }
-
-        $newpassword = bcrypt(request('password'));
 
         $moviereservation = MovieReservation::create([
             'date' => request('date'),
@@ -89,7 +113,9 @@ class MovieReservationController extends Controller
         #$this->authorize('viewAny', $userFound);
 
         if(!$movieReservationFound)
-            return $this->returnError(404, $this->getErrorCode('moviereservation not found'), 'moviereservation is not found');
+        {
+            return $this->returnError($this->getErrorCode('moviereservation not found'), 404, 'moviereservation is not found');
+        }
 
         return $this->returnData('moviereservation', $movieReservationFound, 200, 'moviereservation found!');
     }
@@ -120,17 +146,42 @@ class MovieReservationController extends Controller
         if ($moviereservation == null)
             return $this->returnError($this->getErrorCode('moviereservation not found'), 404, 'MovieReservation Not Found');
 
-        // $validator = Validator::make(request()->all(), [
-        //     "username" => "unique:moviereservations,username,".$id,
-        //     "email" => "email|unique:moviereservations,email,".$id,
-        //     "role" => [Rule::in(['admin', 'customer','manager']),],
-        //     "mobile_number" => "digits_between:10,11"
-        // ]);
+        $date = $request->input('date');
+        $newStartTime = strtotime($request->input('start_time'));
+        $newEndTime = strtotime($request->input('end_time'));
 
-        // if ($validator->fails()) {
-        //     $code = $this->returnCodeAccordingToInput($validator);
-        //     return $this->returnValidationError($code, $validator);
-        // }
+        if (($date != null && $date != $moviereservation->date) || ($newStartTime != null || $newEndTime != null))
+        {
+            if ($newStartTime == null)
+                $newStartTime = $moviereservation->start_time;
+            if ($newEndTime == null)
+                $newEndTime = $moviereservation->end_time;
+            if ($date == null)
+                $date = $moviereservation->date;
+
+            //start time can't be greater than end time :D
+            if($newStartTime >= $newEndTime)
+                return $this->returnError($this->getErrorCode("start time shouldn't be greater than end time"), 404, "start time shouldn't be greater than end time");
+
+            $sameDateReservations = MovieReservation::where('date', 'LIKE', request('date') . '%')->get();
+
+            for($i=0; $i<count($sameDateReservations); $i++)
+            {
+                $movResv = $sameDateReservations[$i];
+
+                $startTime = strtotime($movResv->start_time);
+                $endTime = strtotime($movResv->end_time);
+
+                if($newStartTime > $startTime && $newEndTime < $endTime ||
+                ($newStartTime > $startTime && $newStartTime < $endTime) || ($newEndTime > $startTime && $newEndTime < $endTime) ||
+                $newStartTime==$startTime || $newEndTime==$endTime||
+                $startTime > $newStartTime && $endTime < $newEndTime)
+                {
+                    //overlap in time
+                    return $this->returnError($this->getErrorCode('overlap in time of reservation'), 404, 'Overlap in time of reservation is not allowed!');
+                }
+            }
+        }
 
         $moviereservation->update($request->all());
 
