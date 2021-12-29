@@ -43,6 +43,8 @@ Route::get('/users/{user}', 'UserController@show'); //show
 Route::put('/users/{user}', 'UserController@update'); //update
 Route::post('/users/create', 'UserController@create'); //create
 Route::delete('/users/{user}', 'UserController@destroy'); //delete
+Route::get('/users/management/unapproved_managers', 'UserController@getUnApprovedManagers'); //get
+Route::put('/users/approve/{user}', 'UserController@approve_manager'); //put
 
 //////////////////// Customer /////////////////////////
 Route::get('/customers/{customer}', 'CustomerController@index'); //index

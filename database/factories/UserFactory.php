@@ -28,5 +28,6 @@ $factory->define(User::class, function (Faker $faker) {
         'password' => Hash::make('secret'), // password
         'remember_token' => Str::random(10),
         'role' => $faker->randomElement(['customer', 'customer', 'customer', 'manager']),
+        'management_request' => $faker->randomElement([true, false])
     ];
 });

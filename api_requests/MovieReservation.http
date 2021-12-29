@@ -17,8 +17,8 @@ POST http://127.0.0.1:8000/api/login HTTP/1.1
 content-type: application/json
 
 {
-  "email": "iharris@example.org",
-  "password": "secret"
+  "email": "osamayahya98@yahoo.com",
+  "password": "veryNoice"
 }
 
 ###
@@ -33,8 +33,23 @@ POST http://127.0.0.1:8000/api/moviereservations/create HTTP/1.1
 content-type: application/json
 
 {
-  "date": "2020-12-13",
-  "start_time": "10:49:36",
+  "date": "2020-12-14",
+  "start_time": "01:49:36",
+  "end_time": "03:07:58",
+  "vacant_reserved_seats": "Woow, Seats V2!",
+  "capacity": 2,
+  "price": 7,
+  "movie_id": 2
+}
+
+###
+
+PUT http://127.0.0.1:8000/api/moviereservations/8 HTTP/1.1
+content-type: application/json
+
+{
+  "date": "2020-12-15",
+  "start_time": "07:49:36",
   "end_time": "09:07:58",
   "vacant_reserved_seats": "Woow, Seats!",
   "capacity": 2,
@@ -44,14 +59,5 @@ content-type: application/json
 
 ###
 
-PUT http://127.0.0.1:8000/api/moviereservations/20 HTTP/1.1
-content-type: application/json
-
-{
-  "first_name": "Osama"
-}
-
-###
-
-DELETE http://127.0.0.1:8000/api/moviereservations/21 HTTP/1.1
+DELETE http://127.0.0.1:8000/api/moviereservations/8 HTTP/1.1
 content-type: application/json

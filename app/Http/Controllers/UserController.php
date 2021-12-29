@@ -30,7 +30,35 @@ class UserController extends Controller
         $users = User::all();
         #$this->authorize('view', $users);
 
-        return $this->returnData('user', $users, 200, 'users returned!');
+        return $this->returnData('users', $users, 200, 'users returned!');
+    }
+
+    public function getUnApprovedManagers()
+    {
+        #$this->authorize('view', $users);
+
+        $users = User::where('management_request', 'LIKE', '1' . '%')->where('role', 'LIKE', 'customer' . '%')->get();
+
+        return $this->returnData('users', $users, 200, 'users returned!');
+    }
+
+    public function approve_manager($id)
+    {
+        #$this->authorize('create',User::class);
+
+        $user = User::where('id', $id)->where('management_request', true)->where('role', 'customer')->get();
+        
+        if (count($user) == 0)
+            return $this->returnError($this->getErrorCode('user not found'), 404, 'User Not Found');
+
+        $user = $user[0]; 
+
+        $user->update([
+            "role" => "manager",
+            "management_request" => false
+        ]);
+
+        return $this->returnSuccessMessage('Manager Approved Successfully!');
     }
 
     /**
@@ -49,7 +77,8 @@ class UserController extends Controller
             "email" => "required|email|unique:users",
             "password" => "required",
             "role" => ['required', Rule::in(['admin', 'customer','manager']),],
-            "mobile_number" => "required|digits_between:10,11"
+            "mobile_number" => "required|digits_between:10,11",
+            "management_request" => "required"
         ]);
 
         if ($validator->fails()) {
@@ -67,6 +96,7 @@ class UserController extends Controller
             'password' => $newpassword,
             'role' => request('role'),
             'mobile_number' => request('mobile_number'),
+            'management_request' => request('management_request')
         ]);
 
         return $this->returnSuccessMessage('User Created Successfully!');

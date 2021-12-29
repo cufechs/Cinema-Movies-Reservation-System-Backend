@@ -41,14 +41,22 @@ class LoginController extends Controller
     {
         $creds = request()->only(['email', 'password']);
         $token = auth('api')->attempt($creds);
+
         if (!$token)
             return $this->returnError($this->getErrorCode('incorrect email or password'), 401, 'incorrect email or password');
+
         $user =  User::where(['email' => $request['email']])->get()[0];
+
         $role = $user->role;
         $id = $user->id;
         $role_id = $id;
-        if($role == 'customer')
-            $role_id = Customer::where('user_id', $id)->get()[0]->id;
+
+        // if($role == 'customer')
+        // {
+        //     return "Nice";
+
+        //     $role_id = Customer::where('user_id', $id)->get()[0]->id;
+        // }
         // else if($role == 'manager')
         //     $role_id = Manager::where('user_id', $id)->get()[0]->id;
         // else if($role == 'admin')

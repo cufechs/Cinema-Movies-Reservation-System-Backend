@@ -12,6 +12,16 @@ Authorization: Bearer {{ token }}
 
 ###
 
+GET http://127.0.0.1:8000/api/users/management/unapproved_managers HTTP/1.1
+content-type: application/json
+
+###
+
+PUT http://127.0.0.1:8000/api/users/approve/600 HTTP/1.1
+content-type: application/json
+
+###
+
 # login
 POST http://127.0.0.1:8000/api/login HTTP/1.1
 content-type: application/json
@@ -33,9 +43,9 @@ POST http://127.0.0.1:8000/api/users/create HTTP/1.1
 content-type: application/json
 
 {
-  "first_name": "Osama",
+  "first_name": "OsamaV2",
   "last_name": "Yahya",
-  "username": "ossyahya98",
+  "username": "ossyahya980",
   "password": "veryNoice",
   "email": "osamayahya98@yahoo.com",
   "role": "customer",
