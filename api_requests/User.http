@@ -17,7 +17,7 @@ content-type: application/json
 
 ###
 
-PUT http://127.0.0.1:8000/api/users/approve/600 HTTP/1.1
+PUT http://127.0.0.1:8000/api/users/approve/6 HTTP/1.1
 content-type: application/json
 
 ###
@@ -27,7 +27,7 @@ POST http://127.0.0.1:8000/api/login HTTP/1.1
 content-type: application/json
 
 {
-  "email": "iharris@example.org",
+  "email": "maxie.feil@example.org",
   "password": "secret"
 }
 
@@ -49,7 +49,8 @@ content-type: application/json
   "password": "veryNoice",
   "email": "osamayahya98@yahoo.com",
   "role": "customer",
-  "mobile_number": "01025040565"
+  "mobile_number": "01025040565",
+  "management_request": true
 }
 
 ###

@@ -61,8 +61,8 @@ PUT http://127.0.0.1:8000/api/moviereservations/reserve/1 HTTP/1.1
 content-type: application/json
 
 {
-  "id": 6,
-  "seat_no": 10
+  "id": 1,
+  "seat_no": 11
 }
 
 ###
@@ -71,7 +71,7 @@ PUT http://127.0.0.1:8000/api/moviereservations/delete/1 HTTP/1.1
 content-type: application/json
 
 {
-  "id": 6
+  "id": 1
 }
 
 ###

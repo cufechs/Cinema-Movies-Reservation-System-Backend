@@ -16,8 +16,8 @@ class CreateMovieReservationsTable extends Migration
         Schema::create('moviereservations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->date('date');
-            $table->timestamp('start_time');
-            $table->timestamp('end_time');
+            $table->timestamp('start_time')->default('1973-11-04 16:41:31');
+            $table->timestamp('end_time')->default('1973-11-04 16:41:31');
             $table->string('vacant_reserved_seats');
             $table->unsignedBigInteger('capacity');
             $table->unsignedBigInteger('price');

@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('mobile_number')->nullable();
             $table->rememberToken();
-            $table->boolean('management_request');
+            $table->boolean('management_request')->default(false);
             $table->timestamps();
         });
     }

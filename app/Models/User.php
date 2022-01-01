@@ -11,7 +11,7 @@ use Tymon\JWTAuth\JWTAuth;
 use App\Models\MovieReservation;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
@@ -49,20 +49,20 @@ class User extends Model
      *
      * @return mixed
      */
-    // public function getJWTIdentifier()
-    // {
-    //     return $this->getKey();
-    // }
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
-    // /**
-    //  * Return a key value array, containing any custom claims to be added to the JWT.
-    //  *
-    //  * @return array
-    //  */
-    // public function getJWTCustomClaims()
-    // {
-    //     return [];
-    // }
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     // public function customer(): \Illuminate\Database\Eloquent\Relations\HasOne
     // {
