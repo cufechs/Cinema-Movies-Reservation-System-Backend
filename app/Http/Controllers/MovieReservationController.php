@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Database;
 use App\Http\Traits\GeneralTrait;
 use Illuminate\Support\Facades\Validator;
+use DateTime;
 
 class MovieReservationController extends Controller
 {
@@ -42,12 +43,16 @@ class MovieReservationController extends Controller
             "end_time" => "required",
             "capacity" => "required",
             "price" => "required",
-            "vacant_reserved_seats" => "required",
             'movie_id' => "required"
         ]);
 
-        $newStartTime = strtotime(request('start_time'));
-        $newEndTime = strtotime(request('end_time'));
+        if (request('capacity') != 20 && request('capacity') != 30)
+            return $this->returnError($this->getErrorCode("capacity should be 20 or 30 only"), 404, "capacity should be 20 or 30 only");
+
+        $st = new DateTime(request('start_time'));
+        $et = new DateTime(request('end_time'));
+        $newStartTime = strtotime(strval($st->format('h:i:s')));
+        $newEndTime = strtotime(strval($et->format('h:i:s')));
 
         //start time can't be greater than end time :D
         if($newStartTime >= $newEndTime)
@@ -59,8 +64,10 @@ class MovieReservationController extends Controller
         {
             $movResv = $sameDateReservations[$i];
 
-            $startTime = strtotime($movResv->start_time);
-            $endTime = strtotime($movResv->end_time);
+            $st = new DateTime($movResv->start_time);
+            $et = new DateTime($movResv->end_time);
+            $startTime = strtotime(strval($st->format('h:i:s')));
+            $endTime = strtotime(strval($et->format('h:i:s')));
 
             if($newStartTime > $startTime && $newEndTime < $endTime ||
             ($newStartTime > $startTime && $newStartTime < $endTime) || ($newEndTime > $startTime && $newEndTime < $endTime) ||
@@ -77,13 +84,18 @@ class MovieReservationController extends Controller
             return $this->returnValidationError($code, $validator);
         }
 
+        $vancantSeats = '{"seats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}';
+
+        if (request('capacity') == 30)
+            $vancantSeats = '{"seats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}';
+        
         $moviereservation = MovieReservation::create([
             'date' => request('date'),
             'start_time' => request('start_time'),
             'end_time' => request('end_time'),
             'capacity' => request('capacity'),
             'price' => request('price'),
-            'vacant_reserved_seats' => request('vacant_reserved_seats'),
+            'vacant_reserved_seats' => $vancantSeats,
             'movie_id' => request('movie_id')
         ]);
 
@@ -110,6 +122,7 @@ class MovieReservationController extends Controller
     public function show($moviereservation)
     {
         $movieReservationFound = MovieReservation::find($moviereservation);
+
         #$this->authorize('viewAny', $userFound);
 
         if(!$movieReservationFound)
@@ -146,9 +159,14 @@ class MovieReservationController extends Controller
         if ($moviereservation == null)
             return $this->returnError($this->getErrorCode('moviereservation not found'), 404, 'MovieReservation Not Found');
 
+        if (request('capacity') != null && request('capacity') != 20 && request('capacity') != 30)
+            return $this->returnError($this->getErrorCode("capacity should be 20 or 30 only"), 404, "capacity should be 20 or 30 only");
+
         $date = $request->input('date');
-        $newStartTime = strtotime($request->input('start_time'));
-        $newEndTime = strtotime($request->input('end_time'));
+        $st = new DateTime(request('start_time'));
+        $et = new DateTime(request('end_time'));
+        $newStartTime = strtotime(strval($st->format('h:i:s')));
+        $newEndTime = strtotime(strval($et->format('h:i:s')));
 
         if (($date != null && $date != $moviereservation->date) || ($newStartTime != null || $newEndTime != null))
         {
@@ -169,8 +187,13 @@ class MovieReservationController extends Controller
             {
                 $movResv = $sameDateReservations[$i];
 
-                $startTime = strtotime($movResv->start_time);
-                $endTime = strtotime($movResv->end_time);
+                if($movResv->id == $id)
+                    continue;
+
+                $st = new DateTime($movResv->start_time);
+                $et = new DateTime($movResv->end_time);
+                $startTime = strtotime(strval($st->format('h:i:s')));
+                $endTime = strtotime(strval($et->format('h:i:s')));
 
                 if($newStartTime > $startTime && $newEndTime < $endTime ||
                 ($newStartTime > $startTime && $newStartTime < $endTime) || ($newEndTime > $startTime && $newEndTime < $endTime) ||
@@ -187,6 +210,82 @@ class MovieReservationController extends Controller
 
         return $this->returnSuccessMessage('MovieReservation Updated Successfully!');
     }
+
+    public function addUserReservation(Request $request, $user)
+    {
+        $userFound = User::find($user);
+        if ($userFound == null)
+            return $this->returnError($this->getErrorCode('user not found'), 404, 'User Not Found');
+
+        $reservation = $request->input('id');
+        $reservationFound = MovieReservation::find($request->input('id'));
+        if ($reservationFound == null)
+            return $this->returnError($this->getErrorCode('reservation not found'), 404, 'Reservation Not Found');
+
+        $seatNo = $request->input('seat_no');
+
+        if ($seatNo > $reservationFound->capacity || $seatNo < 1)
+            return $this->returnError($this->getErrorCode('seat number should be positive and smaller than capacity'), 404, 'seat number should be positive and smaller than capacity');
+
+        $vacSeats = json_decode($reservationFound->vacant_reserved_seats, true)['seats'];
+        
+        if ($vacSeats[$seatNo - 1] == 1)
+            return $this->returnError($this->getErrorCode('seat is already reserved!'), 404, 'seat is already reserved!');
+
+        $vacSeats[$seatNo - 1] = 1;
+
+        $reservationFound->vacant_reserved_seats = "{" . '"seats": ' . json_encode($vacSeats) . "}";
+
+        $reservationFound->save();
+
+        $userFound->moviereservations()->attach($reservationFound->id, ['seat_no' => $seatNo]);
+
+        return $this->returnSuccessMessage('Reservation is Successful!');
+    }
+
+    public function deleteUserReservation(Request $request, $user)
+    {
+        $userFound = User::find($user);
+        if ($userFound == null)
+            return $this->returnError($this->getErrorCode('user not found'), 404, 'User Not Found');
+
+        $reservation = $request->input('id');
+        $reservationFound = MovieReservation::find($request->input('id'));
+        if ($reservationFound == null)
+            return $this->returnError($this->getErrorCode('reservation not found'), 404, 'Reservation Not Found');
+
+        $vacSeats = json_decode($reservationFound->vacant_reserved_seats, true)['seats'];
+        
+        $reservations = $userFound->moviereservations()->get();
+
+        if (count($reservations) == 0)
+            return $this->returnError($this->getErrorCode('There is no reserved seat!'), 404, 'There is no reserved seat!');
+
+        $seatNo = 0;
+        foreach($reservations as $reserv)
+        {
+            if ($reserv->id == $reservation)
+            {
+                $seatNo = $reserv->pivot->seat_no;
+                $userFound->moviereservations()->detach($reservation);
+                break;
+            }
+        }
+
+        $st = new DateTime($reservationFound->start_time);
+        $newStartTime = strtotime(strval($st->format('h:i:s')));
+        if ($newStartTime - strtotime(strval(now()->format('h:i:s'))) < 10800)
+            return $this->returnError($this->getErrorCode('You can\'t cancel this reservation, it\'s too late!'), 404, 'You can\'t cancel this reservation, it\'s too late!');
+
+        $vacSeats[$seatNo - 1] = 0;
+
+        $reservationFound->vacant_reserved_seats = "{" . '"seats": ' . json_encode($vacSeats) . "}";
+
+        $reservationFound->save();
+
+        return $this->returnSuccessMessage('Deletion is Successful!');
+    }
+
 
     /**
      * Remove the specified resource from storage.

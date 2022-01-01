@@ -16,13 +16,23 @@ class CreateMovieReservationsTable extends Migration
         Schema::create('moviereservations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->date('date');
-            $table->string('start_time');
-            $table->string('end_time');
+            $table->timestamp('start_time');
+            $table->timestamp('end_time');
             $table->string('vacant_reserved_seats');
             $table->unsignedBigInteger('capacity');
             $table->unsignedBigInteger('price');
             $table->unsignedBigInteger('movie_id');
             $table->foreign('movie_id')->references('id')->on('movies');
+            $table->timestamps();
+        });
+
+        Schema::create('user_moviereservation', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('seat_no')->unsigned();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('movie_reservation_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('movie_reservation_id')->references('id')->on('moviereservations')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -35,5 +45,6 @@ class CreateMovieReservationsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('moviereservations');
+        Schema::dropIfExists('user_moviereservation');
     }
 }

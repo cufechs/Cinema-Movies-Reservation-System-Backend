@@ -8,8 +8,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\JWTAuth;
+use App\Models\MovieReservation;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Model
 {
     use Notifiable;
 
@@ -47,20 +49,20 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return mixed
      */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+    // public function getJWTIdentifier()
+    // {
+    //     return $this->getKey();
+    // }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+    // /**
+    //  * Return a key value array, containing any custom claims to be added to the JWT.
+    //  *
+    //  * @return array
+    //  */
+    // public function getJWTCustomClaims()
+    // {
+    //     return [];
+    // }
 
     // public function customer(): \Illuminate\Database\Eloquent\Relations\HasOne
     // {
@@ -77,8 +79,8 @@ class User extends Authenticatable implements JWTSubject
     //     return $this->hasOne(Admin::class);
     // }
 
-    // public function customerReservations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    // {
-    //     return $this->belongsToMany(CustomerReservation::class);
-    // }
+    public function moviereservations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(MovieReservation::class, 'user_moviereservation')->withPivot('seat_no');
+    }
 }

@@ -81,6 +81,18 @@ trait GeneralTrait
             return 'E011';
         else if ($input == "start time shouldn't be greater than end time")
             return 'E012';
+        else if ($input == "reservation not found")
+            return 'E013';
+        else if ($input == "capacity should be 20 or 30 only")
+            return 'E014';
+        else if ($input == "seat number should be positive and smaller than capacity")
+            return 'E015';
+        else if ($input == "seat is already reserved!")
+            return 'E016';
+        else if ($input == "There is no reserved seat!")
+            return 'E017';
+        else if ($input == "You can\'t cancel this reservation, it\'s too late!")
+            return 'E018';
         else
             return "";
     }

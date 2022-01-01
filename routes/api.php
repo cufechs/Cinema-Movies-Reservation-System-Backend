@@ -46,15 +46,16 @@ Route::delete('/users/{user}', 'UserController@destroy'); //delete
 Route::get('/users/management/unapproved_managers', 'UserController@getUnApprovedManagers'); //get
 Route::put('/users/approve/{user}', 'UserController@approve_manager'); //put
 
-//////////////////// Customer /////////////////////////
-Route::get('/customers/{customer}', 'CustomerController@index'); //index
-
-//////////////////// Moive /////////////////////////
+//////////////////// Movie /////////////////////////
 Route::get('/movies/all', 'MovieController@index'); //index
 Route::post('/movie/create', 'MovieController@create'); //create
 Route::get('/movie/show/{movie}', 'MovieController@show'); //show
 Route::put('/movie/update/{movie}', 'MovieController@update'); //update
 Route::delete('/movie/delete/{movie}', 'MovieController@destroy'); //delete
+
+//////////////////////User Reservation////////////////////////////
+Route::put('/moviereservations/reserve/{user}', 'MovieReservationController@addUserReservation');
+Route::put('/moviereservations/delete/{user}', 'MovieReservationController@deleteUserReservation');
 
 ////////////////////// Movie Reservation /////////////////////////
 Route::get('/moviereservations', 'MovieReservationController@index'); //index

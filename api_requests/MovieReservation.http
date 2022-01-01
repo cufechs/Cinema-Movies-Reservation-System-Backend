@@ -1,6 +1,6 @@
 @token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTY0MDU0NjMxNywiZXhwIjoxNjQwNTQ5OTE3LCJuYmYiOjE2NDA1NDYzMTcsImp0aSI6ImJQVGhhNjV6bjJlcjRHaDYiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.xTT8zoI5an-EXrxwcBVw4MpAldUuJBG596QD1u7f-F8
 
-GET http://127.0.0.1:8000/api/moviereservations/30 HTTP/1.1
+GET http://127.0.0.1:8000/api/moviereservations/1 HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{ token }}
 
@@ -34,30 +34,47 @@ content-type: application/json
 
 {
   "date": "2020-12-14",
-  "start_time": "01:49:36",
-  "end_time": "03:07:58",
-  "vacant_reserved_seats": "Woow, Seats V2!",
-  "capacity": 2,
+  "start_time": "2020-12-14 05:06:36",
+  "end_time": "2020-12-14 07:07:58",
+  "capacity": 20,
   "price": 7,
   "movie_id": 2
 }
 
 ###
 
-PUT http://127.0.0.1:8000/api/moviereservations/8 HTTP/1.1
+PUT http://127.0.0.1:8000/api/moviereservations/6 HTTP/1.1
 content-type: application/json
 
 {
   "date": "2020-12-15",
-  "start_time": "07:49:36",
-  "end_time": "09:07:58",
-  "vacant_reserved_seats": "Woow, Seats!",
-  "capacity": 2,
+  "start_time": "2022-01-14 09:06:36",
+  "end_time": "2022-12-14 12:06:36",
+  "capacity": 20,
   "price": 7,
-  "movie_id": 2
+  "movie_id": 1
 }
 
 ###
 
-DELETE http://127.0.0.1:8000/api/moviereservations/8 HTTP/1.1
+PUT http://127.0.0.1:8000/api/moviereservations/reserve/1 HTTP/1.1
+content-type: application/json
+
+{
+  "id": 6,
+  "seat_no": 10
+}
+
+###
+
+PUT http://127.0.0.1:8000/api/moviereservations/delete/1 HTTP/1.1
+content-type: application/json
+
+{
+  "id": 6
+}
+
+###
+
+DELETE http://127.0.0.1:8000/api/moviereservations/1 HTTP/1.1
 content-type: application/json

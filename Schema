@@ -9,10 +9,6 @@ Tables:
 		6- role
 		7- last_name
 		8- mobile_number
-		
-	2- Customer:
-		1- id (PK)
-		2- user_id (FK)
 
 	3- Movie:
 		1- id (PK)
@@ -30,14 +26,7 @@ Tables:
 		7- vacant_reserved_seats //json array
 		8- price
 		
-	6- Adminstrator:
-		1- id (PK)
-		2- user_id (FK)
-		
-	7- Manager:
-		1- id (PK)
-		2- user_id (FK)
-		
 	8- Cust_Reservation:
 		1- cust_id (FK)
 		2- movie_reservation_id(FK)
+		3- seat_no
