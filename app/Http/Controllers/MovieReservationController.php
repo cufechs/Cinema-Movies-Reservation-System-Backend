@@ -22,8 +22,16 @@ class MovieReservationController extends Controller
      */
     public function index()
     {
-        $moviereservations = MovieReservation::all();
         #$this->authorize('view', $moviereservations);
+        $moviereservations = MovieReservation::all();
+
+        return $this->returnData('moviereservation', $moviereservations, 200, 'moviereservations returned!');
+    }
+
+    public function getMovieReservations($movieID)
+    {
+        #$this->authorize('view', $moviereservations);
+        $moviereservations = MovieReservation::where('movie_id', 'LIKE', $movieID . '%')->where('end_time', '>', now() . '%')->get();
 
         return $this->returnData('moviereservation', $moviereservations, 200, 'moviereservations returned!');
     }

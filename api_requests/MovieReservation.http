@@ -12,6 +12,12 @@ Authorization: Bearer {{ token }}
 
 ###
 
+GET http://127.0.0.1:8000/api/moviereservations/getReservations/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{ token }}
+
+###
+
 # login
 POST http://127.0.0.1:8000/api/login HTTP/1.1
 content-type: application/json
