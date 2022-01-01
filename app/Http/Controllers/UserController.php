@@ -55,7 +55,7 @@ class UserController extends Controller
 
         $user->update([
             "role" => "manager",
-            "management_request" => false
+            "management_request" => 0
         ]);
 
         return $this->returnSuccessMessage('Manager Approved Successfully!');
