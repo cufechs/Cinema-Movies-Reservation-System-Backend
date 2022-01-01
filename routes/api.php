@@ -29,13 +29,13 @@ Route::group(['middleware'=>'auth:api'],function (){
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 
-Route::options('/login', function () {
-    return response()->json([], 200, [
-        'Access-Control-Allow-Origin' => '*',
-        'Access-Control-Allow-Methods' => 'GET, OPTIONS, POST, PUT',
-        'Access-Control-Allow-Headers' => 'Content-Type, Authorization, Access-Control-Allow-Methods, Access-Control-Allow-Headers',
-    ]);
-});
+// Route::options('/login', function () {
+//     return response()->json([], 200, [
+//         'Access-Control-Allow-Origin' => '*',
+//         'Access-Control-Allow-Methods' => 'GET, OPTIONS, POST, PUT',
+//         'Access-Control-Allow-Headers' => 'Content-Type, Authorization, Access-Control-Allow-Methods, Access-Control-Allow-Headers',
+//     ]);
+// });
 
 ////////////////////// User /////////////////////////
 Route::get('/users', 'UserController@index'); //index
