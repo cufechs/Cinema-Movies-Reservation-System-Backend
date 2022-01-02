@@ -12,7 +12,7 @@ Authorization: Bearer {{ token }}
 
 ###
 
-GET http://127.0.0.1:8000/api/moviereservations/getReservations/1 HTTP/1.1
+GET http://127.0.0.1:8000/api/moviereservations/getReservations/4 HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{ token }}
 
@@ -49,16 +49,11 @@ content-type: application/json
 
 ###
 
-PUT http://127.0.0.1:8000/api/moviereservations/6 HTTP/1.1
+PUT http://127.0.0.1:8000/api/moviereservations/1 HTTP/1.1
 content-type: application/json
 
 {
-  "date": "2020-12-15",
-  "start_time": "2022-01-14 09:06:36",
-  "end_time": "2022-12-14 12:06:36",
-  "capacity": 20,
-  "price": 7,
-  "movie_id": 1
+  "capacity": 30
 }
 
 ###

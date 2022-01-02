@@ -176,11 +176,11 @@ class MovieReservationController extends Controller
         $newStartTime = strtotime(strval($st->format('h:i:s')));
         $newEndTime = strtotime(strval($et->format('h:i:s')));
 
-        if (($date != null && $date != $moviereservation->date) || ($newStartTime != null || $newEndTime != null))
+        if (($date != null && $date != $moviereservation->date) || ($request->input('start_time') != null || $request->input('end_time') != null))
         {
-            if ($newStartTime == null)
+            if ($request->input('start_time') == null)
                 $newStartTime = $moviereservation->start_time;
-            if ($newEndTime == null)
+            if ($request->input('end_time') == null)
                 $newEndTime = $moviereservation->end_time;
             if ($date == null)
                 $date = $moviereservation->date;
