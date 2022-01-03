@@ -58,12 +58,17 @@ content-type: application/json
 
 ###
 
+GET http://127.0.0.1:8000/api/moviereservations/reservation/1 HTTP/1.1
+content-type: application/json
+
+###
+
 PUT http://127.0.0.1:8000/api/moviereservations/reserve/1 HTTP/1.1
 content-type: application/json
 
 {
-  "id": 1,
-  "seat_no": 11
+  "id": 4,
+  "seat_no": 12
 }
 
 ###

@@ -219,6 +219,21 @@ class MovieReservationController extends Controller
         return $this->returnSuccessMessage('MovieReservation Updated Successfully!');
     }
 
+
+    public function getUserReservation($user)
+    {
+        $userFound = User::find($user);
+        if ($userFound == null)
+            return $this->returnError($this->getErrorCode('user not found'), 404, 'User Not Found');
+
+        $reservations = $userFound->moviereservations()->get();
+
+        #if (count($reservations) == 0)
+        #    return $this->returnError($this->getErrorCode('There is no reserved seat!'), 404, 'There is no reserved seat!');
+
+        return $this->returnData('moviereservations', $reservations, 200, 'moviereservation found!');
+    }
+
     public function addUserReservation(Request $request, $user)
     {
         $userFound = User::find($user);
