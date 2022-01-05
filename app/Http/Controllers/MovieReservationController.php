@@ -284,9 +284,12 @@ class MovieReservationController extends Controller
         if (count($reservations) == 0)
             return $this->returnError($this->getErrorCode('There is no reserved seat!'), 404, 'There is no reserved seat!');
 
-        $st = new DateTime($reservationFound->start_time);
-        $newStartTime = strtotime(strval($st->format('h:i:s')));
-        if ($newStartTime - strtotime(strval(now()->format('h:i:s'))) < 10800)
+        $newStartTime = new DateTime($reservationFound->start_time);
+        $now = new DateTime('now + 2 hours');
+        $diff = $newStartTime->diff($now);
+        $hours = $diff->h + ($diff->days*24);
+
+        if ($hours < 3)
             return $this->returnError($this->getErrorCode('You can\'t cancel this reservation, it\'s too late!'), 404, 'You can\'t cancel this reservation, it\'s too late!');
 
         $seatNo = 0;
