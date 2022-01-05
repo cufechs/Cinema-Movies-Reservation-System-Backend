@@ -284,6 +284,11 @@ class MovieReservationController extends Controller
         if (count($reservations) == 0)
             return $this->returnError($this->getErrorCode('There is no reserved seat!'), 404, 'There is no reserved seat!');
 
+        $st = new DateTime($reservationFound->start_time);
+        $newStartTime = strtotime(strval($st->format('h:i:s')));
+        if ($newStartTime - strtotime(strval(now()->format('h:i:s'))) < 10800)
+            return $this->returnError($this->getErrorCode('You can\'t cancel this reservation, it\'s too late!'), 404, 'You can\'t cancel this reservation, it\'s too late!');
+
         $seatNo = 0;
         foreach($reservations as $reserv)
         {
@@ -294,12 +299,7 @@ class MovieReservationController extends Controller
                 break;
             }
         }
-
-        $st = new DateTime($reservationFound->start_time);
-        $newStartTime = strtotime(strval($st->format('h:i:s')));
-        if ($newStartTime - strtotime(strval(now()->format('h:i:s'))) < 10800)
-            return $this->returnError($this->getErrorCode('You can\'t cancel this reservation, it\'s too late!'), 404, 'You can\'t cancel this reservation, it\'s too late!');
-
+      
         $vacSeats[$seatNo - 1] = 0;
 
         $reservationFound->vacant_reserved_seats = "{" . '"seats": ' . json_encode($vacSeats) . "}";
