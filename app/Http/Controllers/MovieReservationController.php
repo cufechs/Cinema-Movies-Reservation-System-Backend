@@ -173,20 +173,28 @@ class MovieReservationController extends Controller
         $date = $request->input('date');
         $st = new DateTime(request('start_time'));
         $et = new DateTime(request('end_time'));
+        $startDate = strtoTime(request('start_time'));
+        $endDate = strtoTime(request('end_time'));
         $newStartTime = strtotime(strval($st->format('h:i:s')));
         $newEndTime = strtotime(strval($et->format('h:i:s')));
 
         if (($date != null && $date != $moviereservation->date) || ($request->input('start_time') != null || $request->input('end_time') != null))
         {
             if ($request->input('start_time') == null)
-                $newStartTime = $moviereservation->start_time;
+            {
+                $newStartTime = strtotime(strval((new DateTime($moviereservation->start_time))->format('h:i:s')));
+                $startDate = strtoTime($moviereservation->start_time);
+            }
             if ($request->input('end_time') == null)
-                $newEndTime = $moviereservation->end_time;
+            {
+                $newEndTime = strtotime(strval((new DateTime($moviereservation->end_time))->format('h:i:s')));
+                $endDate = strtoTime($moviereservation->end_time);
+            }
             if ($date == null)
                 $date = $moviereservation->date;
 
             //start time can't be greater than end time :D
-            if($newStartTime >= $newEndTime)
+            if($startDate >= $endDate)
                 return $this->returnError($this->getErrorCode("start time shouldn't be greater than end time"), 404, "start time shouldn't be greater than end time");
 
             $sameDateReservations = MovieReservation::where('date', 'LIKE', request('date') . '%')->get();
@@ -209,6 +217,7 @@ class MovieReservationController extends Controller
                 $startTime > $newStartTime && $endTime < $newEndTime)
                 {
                     //overlap in time
+                    return $movResv->id;
                     return $this->returnError($this->getErrorCode('overlap in time of reservation'), 404, 'Overlap in time of reservation is not allowed!');
                 }
             }
