@@ -228,6 +228,21 @@ class MovieReservationController extends Controller
         return $this->returnSuccessMessage('MovieReservation Updated Successfully!');
     }
 
+
+    public function getUserReservation($user)
+    {
+        $userFound = User::find($user);
+        if ($userFound == null)
+            return $this->returnError($this->getErrorCode('user not found'), 404, 'User Not Found');
+
+        $reservations = $userFound->moviereservations()->get();
+
+        #if (count($reservations) == 0)
+        #    return $this->returnError($this->getErrorCode('There is no reserved seat!'), 404, 'There is no reserved seat!');
+
+        return $this->returnData('moviereservations', $reservations, 200, 'moviereservation found!');
+    }
+
     public function addUserReservation(Request $request, $user)
     {
         $userFound = User::find($user);
@@ -278,6 +293,14 @@ class MovieReservationController extends Controller
         if (count($reservations) == 0)
             return $this->returnError($this->getErrorCode('There is no reserved seat!'), 404, 'There is no reserved seat!');
 
+        $newStartTime = new DateTime($reservationFound->start_time);
+        $now = new DateTime('now + 2 hours');
+        $diff = $newStartTime->diff($now);
+        $hours = $diff->h + ($diff->days*24);
+
+        if ($hours < 3)
+            return $this->returnError($this->getErrorCode('You can\'t cancel this reservation, it\'s too late!'), 404, 'You can\'t cancel this reservation, it\'s too late!');
+
         $seatNo = 0;
         foreach($reservations as $reserv)
         {
@@ -288,12 +311,7 @@ class MovieReservationController extends Controller
                 break;
             }
         }
-
-        $st = new DateTime($reservationFound->start_time);
-        $newStartTime = strtotime(strval($st->format('h:i:s')));
-        if ($newStartTime - strtotime(strval(now()->format('h:i:s'))) < 10800)
-            return $this->returnError($this->getErrorCode('You can\'t cancel this reservation, it\'s too late!'), 404, 'You can\'t cancel this reservation, it\'s too late!');
-
+      
         $vacSeats[$seatNo - 1] = 0;
 
         $reservationFound->vacant_reserved_seats = "{" . '"seats": ' . json_encode($vacSeats) . "}";

@@ -54,6 +54,7 @@ Route::put('/movie/update/{movie}', 'MovieController@update'); //update
 Route::delete('/movie/delete/{movie}', 'MovieController@destroy'); //delete
 
 //////////////////////User Reservation////////////////////////////
+Route::get('/moviereservations/reservation/{user}', 'MovieReservationController@getUserReservation');
 Route::put('/moviereservations/reserve/{user}', 'MovieReservationController@addUserReservation');
 Route::put('/moviereservations/delete/{user}', 'MovieReservationController@deleteUserReservation');
 
