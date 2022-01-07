@@ -335,7 +335,7 @@ class MovieReservationController extends Controller
         $diff = $newStartTime->diff($now);
         $hours = $diff->h + ($diff->days*24);
 
-        if ($hours < 3)
+        if ($hours < 3 | ($now > $newStartTime))
             return $this->returnError($this->getErrorCode('You can\'t cancel this reservation, it\'s too late!'), 404, 'You can\'t cancel this reservation, it\'s too late!');
 
         $seatNo = [];
