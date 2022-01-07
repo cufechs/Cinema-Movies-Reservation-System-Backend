@@ -99,7 +99,7 @@ class UserController extends Controller
             'management_request' => request('management_request')
         ]);
 
-        return $this->returnSuccessMessage('User Created Successfully!');
+        return $this->returnData('user', $user, 200, 'User Created Successfully!');
     }
 
     /**

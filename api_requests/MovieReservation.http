@@ -49,11 +49,11 @@ content-type: application/json
 
 ###
 
-PUT http://127.0.0.1:8000/api/moviereservations/1 HTTP/1.1
+PUT http://127.0.0.1:8000/api/moviereservations/2 HTTP/1.1
 content-type: application/json
 
 {
-  "capacity": 30
+  "start_time": "1996-02-27 10:41:18"
 }
 
 ###

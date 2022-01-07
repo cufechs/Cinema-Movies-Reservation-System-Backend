@@ -17,7 +17,7 @@ content-type: application/json
 
 ###
 
-PUT http://127.0.0.1:8000/api/users/approve/4 HTTP/1.1
+PUT http://127.0.0.1:8000/api/users/approve/7 HTTP/1.1
 content-type: application/json
 
 ###
