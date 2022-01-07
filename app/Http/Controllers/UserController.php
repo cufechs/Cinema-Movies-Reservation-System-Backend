@@ -15,10 +15,12 @@ use App\Providers\AuthServiceProvider;
 use Illuminate\Database;
 use phpDocumentor\Reflection\Types\Null_;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class UserController extends Controller
 {
     use GeneralTrait;
+    use AuthenticatesUsers;
 
     /**
      * Display a listing of the resource.
@@ -121,8 +123,10 @@ class UserController extends Controller
      */
     public function show($user)
     {
+        //return auth()->login();
+
         $userFound = User::find($user);
-        #$this->authorize('viewAny', $userFound);
+        //$this->authorize('viewAny');
 
         if(!$userFound)
             return $this->returnError(404, $this->getErrorCode('user not found'), 'user is not found');

@@ -50,6 +50,9 @@ class LoginController extends Controller
         $role = $user->role;
         $id = $user->id;
         $role_id = $id;
+        $username = $user->username;
+        $first_name = $user->first_name;
+        $last_name = $user->last_name;
 
         // if($role == 'customer')
         // {
@@ -68,6 +71,9 @@ class LoginController extends Controller
             'role' =>  $role,
             'id' => $user->id,
             'role_id' => $role_id,
+            'username' => $username,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
         ],  200, 'logged in successfully');
     }
 

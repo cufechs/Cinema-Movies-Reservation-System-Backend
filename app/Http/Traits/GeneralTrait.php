@@ -93,6 +93,8 @@ trait GeneralTrait
             return 'E017';
         else if ($input == "You can\'t cancel this reservation, it\'s too late!")
             return 'E018';
+        else if ($input == "You can't change reservation capacity if there is a reserved seat")
+            return 'E019';
         else
             return "";
     }

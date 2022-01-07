@@ -10,6 +10,7 @@ use Illuminate\Database;
 use App\Http\Traits\GeneralTrait;
 use Illuminate\Support\Facades\Validator;
 use DateTime;
+use \SplFixedArray;
 
 class MovieReservationController extends Controller
 {
@@ -31,7 +32,7 @@ class MovieReservationController extends Controller
     public function getMovieReservations($movieID)
     {
         #$this->authorize('view', $moviereservations);
-        $moviereservations = MovieReservation::where('movie_id', 'LIKE', $movieID . '%')->where('end_time', '>', now() . '%')->get();
+        $moviereservations = MovieReservation::where('movie_id', 'LIKE', $movieID . '%')->where('end_time', '>', new DateTime('now + 2 hours') . '%')->get();
 
         return $this->returnData('moviereservation', $moviereservations, 200, 'moviereservations returned!');
     }
@@ -71,6 +72,9 @@ class MovieReservationController extends Controller
         for($i=0; $i<count($sameDateReservations); $i++)
         {
             $movResv = $sameDateReservations[$i];
+
+            if($moviereservation->capacity != $movResv->capacity)
+                continue;
 
             $st = new DateTime($movResv->start_time);
             $et = new DateTime($movResv->end_time);
@@ -167,8 +171,40 @@ class MovieReservationController extends Controller
         if ($moviereservation == null)
             return $this->returnError($this->getErrorCode('moviereservation not found'), 404, 'MovieReservation Not Found');
 
-        if (request('capacity') != null && request('capacity') != 20 && request('capacity') != 30)
+        $capacity = request('capacity');
+        if ($capacity != null && $capacity != 20 && $capacity != 30)
             return $this->returnError($this->getErrorCode("capacity should be 20 or 30 only"), 404, "capacity should be 20 or 30 only");
+
+        $vacSeats = json_decode($moviereservation->vacant_reserved_seats, true)['seats'];
+        if ( $capacity == $moviereservation->capacity)
+            $vacSeats = json_encode("{" . '"seats": ' . json_encode($vacSeats) . "}");
+
+        if ($capacity != null && $capacity != $moviereservation->capacity)
+        {
+            // Reallocate vacant since it changed
+            $notValid = false;
+            foreach ($vacSeats as $seat)
+            {
+                if ($seat == 1)
+                {
+                    $notValid = true;
+                    break;
+                }
+            }
+
+            if (!$notValid)
+            {
+                $vacSeats = new SplFixedArray($capacity);
+
+                $vacSeats = '{"seats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}';
+
+                if ($capacity == 30)
+                    $vacSeats = '{"seats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}';
+            }
+            else
+                return $this->returnError($this->getErrorCode("You can't change reservation capacity if there is a reserved seat"), 404, "You can't change reservation capacity if there is a reserved seat");
+
+        }
 
         $date = $request->input('date');
         $st = new DateTime(request('start_time'));
@@ -203,13 +239,13 @@ class MovieReservationController extends Controller
             {
                 $movResv = $sameDateReservations[$i];
 
-                if($movResv->id == $id)
+                if($movResv->id == $id || $moviereservation->capacity != $movResv->capacity)
                     continue;
 
                 $st = new DateTime($movResv->start_time);
                 $et = new DateTime($movResv->end_time);
-                $startTime = strtotime(strval($st->format('h:i:s')));
-                $endTime = strtotime(strval($et->format('h:i:s')));
+                $startTime = strtotime(strval($st));
+                $endTime = strtotime(strval($et));
 
                 if($newStartTime > $startTime && $newEndTime < $endTime ||
                 ($newStartTime > $startTime && $newStartTime < $endTime) || ($newEndTime > $startTime && $newEndTime < $endTime) ||
@@ -224,6 +260,7 @@ class MovieReservationController extends Controller
         }
 
         $moviereservation->update($request->all());
+        $moviereservation->update(['vacant_reserved_seats' => $vacSeats]);
 
         return $this->returnSuccessMessage('MovieReservation Updated Successfully!');
     }
@@ -301,18 +338,24 @@ class MovieReservationController extends Controller
         if ($hours < 3)
             return $this->returnError($this->getErrorCode('You can\'t cancel this reservation, it\'s too late!'), 404, 'You can\'t cancel this reservation, it\'s too late!');
 
-        $seatNo = 0;
+        $seatNo = [];
+        $shouldDetach = false;
         foreach($reservations as $reserv)
         {
             if ($reserv->id == $reservation)
             {
-                $seatNo = $reserv->pivot->seat_no;
-                $userFound->moviereservations()->detach($reservation);
-                break;
+                array_push($seatNo, $reserv->pivot->seat_no) ;
+                $shouldDetach = true;
             }
         }
-      
-        $vacSeats[$seatNo - 1] = 0;
+
+        if($shouldDetach)
+        {
+            $userFound->moviereservations()->detach($reservation);
+            
+            foreach($seatNo as $no)
+                $vacSeats[$no - 1] = 0;
+        }
 
         $reservationFound->vacant_reserved_seats = "{" . '"seats": ' . json_encode($vacSeats) . "}";
 

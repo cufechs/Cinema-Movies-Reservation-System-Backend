@@ -1,6 +1,6 @@
-@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTY0MDU0NjMxNywiZXhwIjoxNjQwNTQ5OTE3LCJuYmYiOjE2NDA1NDYzMTcsImp0aSI6ImJQVGhhNjV6bjJlcjRHaDYiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.xTT8zoI5an-EXrxwcBVw4MpAldUuJBG596QD1u7f-F8
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTY0MTU2OTM5MCwiZXhwIjoxNjQxNTcyOTkwLCJuYmYiOjE2NDE1NjkzOTAsImp0aSI6ImNDM3RySko3MUtIN3FPVGUiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.gRpNxCVy9qEN3bz4tzHiKucW0zq2DEZhoMsXG6zhRGw
 
-GET http://127.0.0.1:8000/api/users/2 HTTP/1.1
+GET http://127.0.0.1:8000/api/users/1 HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{ token }}
 
@@ -27,7 +27,7 @@ POST http://127.0.0.1:8000/api/login HTTP/1.1
 content-type: application/json
 
 {
-  "email": "maxie.feil@example.org",
+  "email": "giovanny.swift@example.org",
   "password": "secret"
 }
 
@@ -45,9 +45,9 @@ content-type: application/json
 {
   "first_name": "OsamaV2",
   "last_name": "Yahya",
-  "username": "ossyahya980",
+  "username": "ossyahya9800",
   "password": "veryNoice",
-  "email": "osamayahya98@yahoo.com",
+  "email": "osamayahya980@yahoo.com",
   "role": "customer",
   "mobile_number": "01025040565",
   "management_request": true
@@ -56,11 +56,11 @@ content-type: application/json
 ###
 
 
-PUT http://127.0.0.1:8000/api/users/20 HTTP/1.1
+PUT http://127.0.0.1:8000/api/users/24 HTTP/1.1
 content-type: application/json
 
 {
-  "first_name": "Osama"
+  "role": "customer"
 }
 
 ###
