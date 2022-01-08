@@ -68,7 +68,7 @@ content-type: application/json
 
 {
   "id": 2,
-  "seat_no": 3
+  "seat_no": "{ \"seat_no\": [ 14, 15 ] }"
 }
 
 ###

@@ -295,7 +295,22 @@ class MovieReservationController extends Controller
             return $this->returnError($this->getErrorCode('reservation not found'), 404, 'Reservation Not Found');
 
         $seatNo = $request->input('seat_no');
+        $seats = json_decode($request->input('seat_no'), true)['seat_no'];
 
+        $vacSeats = json_decode($reservationFound->vacant_reserved_seats, true)['seats'];
+
+        foreach($seats as $st)
+        {
+            $st = (int)$st;
+            if ($st > $reservationFound->capacity || $st < 1)
+                return $this->returnError($this->getErrorCode('seat number should be positive and smaller than capacity'), 404, 'seat number should be positive and smaller than capacity');
+            
+            if ($vacSeats[$st - 1] == 1)
+                return $this->returnError($this->getErrorCode('seat is already reserved!'), 404, 'seat ' . $st . ' is already reserved!');
+
+            $vacSeats[$st - 1] = 1;
+        }
+        /*
         if ($seatNo > $reservationFound->capacity || $seatNo < 1)
             return $this->returnError($this->getErrorCode('seat number should be positive and smaller than capacity'), 404, 'seat number should be positive and smaller than capacity');
 
@@ -305,6 +320,7 @@ class MovieReservationController extends Controller
             return $this->returnError($this->getErrorCode('seat is already reserved!'), 404, 'seat is already reserved!');
 
         $vacSeats[$seatNo - 1] = 1;
+        */
 
         $reservationFound->vacant_reserved_seats = "{" . '"seats": ' . json_encode($vacSeats) . "}";
 

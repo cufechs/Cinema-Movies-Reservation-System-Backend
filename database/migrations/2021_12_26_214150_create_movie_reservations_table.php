@@ -28,7 +28,7 @@ class CreateMovieReservationsTable extends Migration
 
         Schema::create('user_moviereservation', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('seat_no')->unsigned();
+            $table->string('seat_no');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('movie_reservation_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
