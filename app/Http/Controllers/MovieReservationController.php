@@ -363,7 +363,12 @@ class MovieReservationController extends Controller
         {
             if ($reserv->id == $reservation)
             {
-                array_push($seatNo, $reserv->pivot->seat_no) ;
+                $sts = json_decode($reserv->pivot->seat_no, true)['seat_no'];
+                foreach($sts as $st)
+                {
+                    $st = (int)$st;
+                    array_push($seatNo, $st);
+                }
                 $shouldDetach = true;
             }
         }
