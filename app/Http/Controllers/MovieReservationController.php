@@ -31,8 +31,11 @@ class MovieReservationController extends Controller
 
     public function getMovieReservations($movieID)
     {
+        if(!Movie::find($movieID))
+            return $this->returnError($this->getErrorCode("moviereservation not found"), 404, "moviereservation not found");
+
         #$this->authorize('view', $moviereservations);
-        $moviereservations = MovieReservation::where('movie_id', 'LIKE', $movieID . '%')->where('end_time', '>', new DateTime('now + 2 hours') . '%')->get();
+        $moviereservations = MovieReservation::where('movie_id', 'LIKE', $movieID . '%')->where('end_time', '>', (new DateTime('now + 2 hours'))->format('Y-m-d H:i:s') . '%')->get();
 
         return $this->returnData('moviereservation', $moviereservations, 200, 'moviereservations returned!');
     }
