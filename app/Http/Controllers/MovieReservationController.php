@@ -180,7 +180,10 @@ class MovieReservationController extends Controller
 
         $vacSeats = json_decode($moviereservation->vacant_reserved_seats, true)['seats'];
         if ( $capacity == $moviereservation->capacity)
-            $vacSeats = json_encode("{" . '"seats": ' . json_encode($vacSeats) . "}");
+        {
+            $vacSeats = json_encode('{' . '"seats": ' . json_encode($vacSeats) . '}');
+            $vacSeats = stripslashes(substr($vacSeats, 1, -1));
+        }
 
         if ($capacity != null && $capacity != $moviereservation->capacity)
         {
@@ -245,8 +248,8 @@ class MovieReservationController extends Controller
                 if($movResv->id == $id || $moviereservation->capacity != $movResv->capacity)
                     continue;
 
-                $st = new DateTime($movResv->start_time);
-                $et = new DateTime($movResv->end_time);
+                $st = (new DateTime($movResv->start_time))->format('yy-mm-dd h:i:s');
+                $et = (new DateTime($movResv->end_time))->format('yy-mm-dd h:i:s');
                 $startTime = strtotime(strval($st));
                 $endTime = strtotime(strval($et));
 
@@ -256,7 +259,6 @@ class MovieReservationController extends Controller
                 $startTime > $newStartTime && $endTime < $newEndTime)
                 {
                     //overlap in time
-                    return $movResv->id;
                     return $this->returnError($this->getErrorCode('overlap in time of reservation'), 404, 'Overlap in time of reservation is not allowed!');
                 }
             }
